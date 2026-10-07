@@ -12,18 +12,28 @@ export default async function ShipmentDetailPage({ params }: { params: { id: str
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profileData } = await supabase.from('profiles').select('role').eq('id', user.id).single() as any
+  const profile = profileData as { role: string } | null
   if (!profile) redirect('/login')
   const isAdmin = profile.role === 'admin'
 
-  const { data: shipment } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: shipmentData } = await (supabase
     .from('shipments')
     .select(`
       *,
       order:purchase_orders(id, code, supplier:suppliers(name))
     `)
     .eq('id', params.id)
-    .single()
+    .single() as any)
+  const shipment = shipmentData as {
+    id: string; code: string; description: string | null; status: string;
+    expected_delivery: string | null; actual_delivery: string | null; notes: string | null;
+    china_carrier: string | null; china_tracking_number: string | null; china_tracking_url: string | null; china_status: string | null;
+    eu_carrier: string | null; eu_tracking_number: string | null; eu_tracking_url: string | null; eu_status: string | null;
+    order: { id: string; code: string; supplier: { name: string } | null } | null;
+  } | null
 
   if (!shipment) notFound()
 

@@ -24,7 +24,9 @@ export default function EditSupplierPage() {
     async function load() {
       setLoading(true)
       const supabase = createClient()
-      const { data } = await supabase.from('suppliers').select('*').eq('id', id).single()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: raw } = await (supabase.from('suppliers') as any).select('*').eq('id', id).single()
+      const data = raw as { name: string; country: string | null; contact_name: string | null; contact_email: string | null; contact_phone: string | null; website: string | null; lead_time_days: number | null; notes: string | null; is_active: boolean } | null
       if (data) {
         setForm({
           name: data.name ?? '',
@@ -52,7 +54,8 @@ export default function EditSupplierPage() {
     setError('')
     setSaving(true)
     const supabase = createClient()
-    const { error } = await supabase.from('suppliers').update({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('suppliers') as any).update({
       name: form.name,
       country: form.country || null,
       contact_name: form.contact_name || null,

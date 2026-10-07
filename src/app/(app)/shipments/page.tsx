@@ -22,7 +22,9 @@ export default async function ShipmentsPage({ searchParams }: { searchParams: { 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profileData } = await supabase.from('profiles').select('role').eq('id', user.id).single() as any
+  const profile = profileData as { role: string } | null
   if (!profile) redirect('/login')
   const isAdmin = profile.role === 'admin'
 
@@ -88,7 +90,6 @@ export default async function ShipmentsPage({ searchParams }: { searchParams: { 
               <TableRow>
                 <TableCell colSpan={7}>
                   <EmptyState
-                    icon={<Truck className="w-8 h-8 text-[var(--muted-foreground)]" />}
                     title="No shipments"
                     description={isAdmin ? 'Create a shipment to track your incoming goods.' : 'No shipments yet.'}
                     action={isAdmin ? <Link href="/shipments/new"><Button size="sm"><Plus className="w-4 h-4 mr-1.5" />New Shipment</Button></Link> : undefined}

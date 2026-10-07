@@ -32,7 +32,8 @@ export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentI
     const supabase = createClient()
     const update: Record<string, unknown> = { status: next }
     if (next === 'delivered') update.actual_delivery = new Date().toISOString()
-    const { error: err } = await supabase.from('shipments').update(update).eq('id', shipmentId)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: err } = await (supabase.from('shipments') as any).update(update).eq('id', shipmentId)
     if (err) setError(err.message)
     else router.refresh()
     setLoading(null)
@@ -43,7 +44,8 @@ export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentI
     setLoading('event')
     setError('')
     const supabase = createClient()
-    const { error: err } = await supabase.from('shipment_events').insert({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: err } = await (supabase.from('shipment_events') as any).insert({
       shipment_id: shipmentId,
       description: event.description,
       location: event.location || null,

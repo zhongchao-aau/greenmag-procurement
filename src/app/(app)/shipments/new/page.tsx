@@ -50,8 +50,8 @@ export default function NewShipmentPage() {
     setError('')
     setLoading(true)
     const supabase = createClient()
-    const { data: shipment, error: err } = await supabase
-      .from('shipments')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: shipment, error: err } = await (supabase.from('shipments') as any)
       .insert({
         order_id: form.order_id || null,
         description: form.description || null,
