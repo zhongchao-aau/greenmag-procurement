@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ArrowLeft, Edit, Package, AlertTriangle } from 'lucide-react'
 import { formatDate, formatRelative, formatQuantity } from '@/lib/utils'
+export const dynamic = 'force-dynamic'
 
 export default async function ComponentDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()

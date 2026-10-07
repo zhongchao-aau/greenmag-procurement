@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { Sidebar } from '@/components/layout/sidebar'
 import type { Profile } from '@/types/database'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

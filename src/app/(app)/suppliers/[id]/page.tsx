@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Edit, Globe, Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
 import type { Supplier } from '@/types/database'
+export const dynamic = 'force-dynamic'
 
 export default async function SupplierDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()

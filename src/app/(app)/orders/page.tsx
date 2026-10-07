@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { Plus, ShoppingCart } from 'lucide-react'
 import { orderStatusClass, ORDER_STATUS_LABELS, formatDate, formatRelative } from '@/lib/utils'
+export const dynamic = 'force-dynamic'
 
 const STATUS_TABS = [
   { value: '', label: 'All' },

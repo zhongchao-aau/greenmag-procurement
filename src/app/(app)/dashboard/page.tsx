@@ -13,6 +13,7 @@ import {
   AlertCircle, Clock, CheckCircle2, Package, Truck,
   FileText, ShoppingCart, ArrowRight, AlertTriangle
 } from 'lucide-react'
+export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   const supabase = await createClient()

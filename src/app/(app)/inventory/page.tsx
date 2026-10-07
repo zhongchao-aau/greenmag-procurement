@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { AlertTriangle } from 'lucide-react'
 import { formatQuantity } from '@/lib/utils'
+export const dynamic = 'force-dynamic'
 
 const FILTER_TABS = [
   { value: '', label: 'All Items' },

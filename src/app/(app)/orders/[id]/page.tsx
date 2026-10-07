@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, ShoppingCart } from 'lucide-react'
 import { orderStatusClass, ORDER_STATUS_LABELS, formatDate, formatRelative, formatQuantity, formatCurrency } from '@/lib/utils'
 import { OrderActions } from './order-actions'
+export const dynamic = 'force-dynamic'
 
 export default async function OrderDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()

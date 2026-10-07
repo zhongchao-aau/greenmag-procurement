@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { Plus, ExternalLink, MapPin } from 'lucide-react'
+export const dynamic = 'force-dynamic'
 
 export default async function SuppliersPage() {
   const supabase = await createClient()

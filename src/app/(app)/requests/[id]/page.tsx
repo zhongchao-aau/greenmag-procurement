@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { ArrowLeft, FileText } from 'lucide-react'
 import { requestStatusClass, REQUEST_STATUS_LABELS, formatDate, formatRelative, formatQuantity } from '@/lib/utils'
 import { RequestActions } from './request-actions'
+export const dynamic = 'force-dynamic'
 
 export default async function RequestDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()

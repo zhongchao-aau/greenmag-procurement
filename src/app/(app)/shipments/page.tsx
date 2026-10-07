@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { Plus, Truck } from 'lucide-react'
 import { shipmentStatusClass, SHIPMENT_STATUS_LABELS, formatDate, formatRelative } from '@/lib/utils'
+export const dynamic = 'force-dynamic'
 
 const STATUS_TABS = [
   { value: '', label: 'All' },

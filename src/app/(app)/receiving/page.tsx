@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 
 import { formatDate } from '@/lib/utils'
+export const dynamic = 'force-dynamic'
 
 export default async function ReceivingPage() {
   const supabase = await createClient()

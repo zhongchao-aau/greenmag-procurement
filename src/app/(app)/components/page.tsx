@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { Plus, Package } from 'lucide-react'
+export const dynamic = 'force-dynamic'
 
 export default async function ComponentsPage({ searchParams }: { searchParams: { supplier?: string; filter?: string } }) {
   const supabase = await createClient()

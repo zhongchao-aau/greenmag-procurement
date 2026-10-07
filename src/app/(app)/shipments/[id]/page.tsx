@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, ExternalLink, Truck, Package } from 'lucide-react'
 import { shipmentStatusClass, SHIPMENT_STATUS_LABELS, formatDate, formatRelative, formatQuantity } from '@/lib/utils'
 import { ShipmentActions } from './shipment-actions'
+export const dynamic = 'force-dynamic'
 
 export default async function ShipmentDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()
