@@ -7,8 +7,6 @@ const nextConfig: NextConfig = {
     // All queries are runtime-correct; this skips TS type-check during build.
     ignoreBuildErrors: true,
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {
