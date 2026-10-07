@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8f9fa;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --primary: #1e40af;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --ring: #1e40af;
+  --radius: 0.5rem;
+  --success: #16a34a;
+  --warning: #d97706;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --radius-sm: calc(var(--radius) - 2px);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Utility classes */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Status badge colours */
+.badge-draft       { background: #f1f5f9; color: #475569; }
+.badge-submitted   { background: #dbeafe; color: #1d4ed8; }
+.badge-review      { background: #fef3c7; color: #92400e; }
+.badge-approved    { background: #dcfce7; color: #166534; }
+.badge-rejected    { background: #fee2e2; color: #991b1b; }
+.badge-changes     { background: #fde8d8; color: #9a3412; }
+.badge-ordered     { background: #dbeafe; color: #1d4ed8; }
+.badge-confirmed   { background: #e0e7ff; color: #3730a3; }
+.badge-shipped     { background: #f0fdf4; color: #15803d; }
+.badge-delivered   { background: #dcfce7; color: #166534; }
+.badge-closed      { background: #f1f5f9; color: #475569; }
+.badge-passed      { background: #dcfce7; color: #166534; }
+.badge-failed      { background: #fee2e2; color: #991b1b; }
+.badge-pending     { background: #fef3c7; color: #92400e; }
+.badge-low-stock   { background: #fee2e2; color: #991b1b; }
+.badge-in-stock    { background: #dcfce7; color: #166534; }
+.badge-cancelled   { background: #fee2e2; color: #991b1b; }
+.badge-under-review { background: #fef3c7; color: #92400e; }
