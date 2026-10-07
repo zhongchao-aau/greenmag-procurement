@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { RefreshCw } from 'lucide-react'
 
 const TRANSITIONS: Record<string, { label: string; next: string }[]> = {
   created: [{ label: 'Mark China Dispatched', next: 'china_dispatched' }],
@@ -20,6 +21,26 @@ const TRANSITIONS: Record<string, { label: string; next: string }[]> = {
 export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentId: string; status: string; isDelivered: boolean }) {
   const router = useRouter()
   const [loading, setLoading] = useState<string | null>(null)
+  const [refreshResult, setRefreshResult] = useState<string | null>(null)
+
+  async function refreshTracking() {
+    setLoading('refresh')
+    setRefreshResult(null)
+    try {
+      const res = await fetch('/api/tracking/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shipmentId }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Refresh failed')
+      setRefreshResult(data.updated > 0 ? 'Tracking updated ✓' : 'No changes')
+      router.refresh()
+    } catch (err) {
+      setRefreshResult(err instanceof Error ? err.message : 'Error')
+    }
+    setLoading(null)
+  }
   const [showEventForm, setShowEventForm] = useState(false)
   const [event, setEvent] = useState({ description: '', location: '', tracking_leg: 'eu' as 'china' | 'eu', event_date: new Date().toISOString().split('T')[0] })
   const [error, setError] = useState('')
@@ -116,6 +137,19 @@ export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentI
               <Button size="sm" type="button" variant="outline" onClick={() => setShowEventForm(false)}>Cancel</Button>
             </div>
           </form>
+        )}
+
+        {!isDelivered && (
+          <>
+            <div className="border-t border-[var(--border)] my-1" />
+            <Button size="sm" variant="ghost" className="w-full justify-start text-[var(--muted-foreground)]"
+              loading={loading === 'refresh'} onClick={refreshTracking}>
+              <RefreshCw className="w-3.5 h-3.5 mr-1.5" />Refresh Tracking
+            </Button>
+            {refreshResult && (
+              <p className="text-xs text-[var(--muted-foreground)] px-1">{refreshResult}</p>
+            )}
+          </>
         )}
 
         {error && <p className="text-xs text-[var(--destructive)]">{error}</p>}

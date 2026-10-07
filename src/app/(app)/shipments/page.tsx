@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptyState } from '@/components/ui/table'
 import { Plus, Truck } from 'lucide-react'
 import { shipmentStatusClass, SHIPMENT_STATUS_LABELS, formatDate, formatRelative } from '@/lib/utils'
+import { RefreshAllTrackingButton } from './refresh-button'
 export const dynamic = 'force-dynamic'
 
 const STATUS_TABS = [
@@ -50,11 +51,14 @@ export default async function ShipmentsPage({ searchParams }: { searchParams: { 
           <h1 className="text-xl font-semibold">Shipments</h1>
           <p className="text-sm text-[var(--muted-foreground)] mt-0.5">{(shipments ?? []).length} shipments</p>
         </div>
-        {isAdmin && (
-          <Link href="/shipments/new">
-            <Button size="sm"><Plus className="w-4 h-4 mr-1.5" />New Shipment</Button>
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          {isAdmin && <RefreshAllTrackingButton />}
+          {isAdmin && (
+            <Link href="/shipments/new">
+              <Button size="sm"><Plus className="w-4 h-4 mr-1.5" />New Shipment</Button>
+            </Link>
+          )}
+        </div>
       </div>
 
       <div className="flex gap-1 mb-4 border-b border-[var(--border)] overflow-x-auto">
