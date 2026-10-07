@@ -88,14 +88,15 @@ export default function NewUsagePage() {
     const supabase = createClient()
 
     // Create inventory_transactions for each item (type = 'usage', quantity is negative)
-    const { error: txErr } = await supabase.from('inventory_transactions').insert(
-      items.map(item => ({
-        component_id: item.component_id,
-        transaction_type: 'usage',
-        quantity: -(parseFloat(item.quantity)),
-        notes: [form.notes, item.notes].filter(Boolean).join(' | ') || null,
-      }))
-    )
+    const txRows = items.map(item => ({
+      component_id: item.component_id,
+      tx_type: 'usage' as const,
+      quantity: parseFloat(item.quantity),
+      direction: -1 as const,
+      reason: [form.notes, item.notes].filter(Boolean).join(' | ') || null,
+    }))
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: txErr } = await supabase.from('inventory_transactions').insert(txRows as any)
 
     if (txErr) { setError(txErr.message); setLoading(false); return }
 

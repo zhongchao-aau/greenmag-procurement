@@ -6,31 +6,29 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowLeft, Edit, Globe, Mail, Phone, MapPin, Clock } from 'lucide-react'
 import { formatDate } from '@/lib/utils'
+import type { Supplier } from '@/types/database'
 
 export default async function SupplierDetailPage({ params }: { params: { id: string } }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: profileData } = await supabase.from('profiles').select('role').eq('id', user.id).single() as any
+  const profile = profileData as { role: string } | null
   if (!profile) redirect('/login')
   const isAdmin = profile.role === 'admin'
 
-  const { data: supplier } = await supabase
-    .from('suppliers')
-    .select('*')
-    .eq('id', params.id)
-    .single()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: supplierData } = await supabase.from('suppliers').select('*').eq('id', params.id).single() as any
+  const supplier = supplierData as Supplier | null
 
   if (!supplier) notFound()
 
   // Components from this supplier
-  const { data: components } = await supabase
-    .from('components')
-    .select('id, code, name, unit, is_active')
-    .eq('supplier_id', params.id)
-    .order('code')
-    .limit(20)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: componentsData } = await supabase.from('components').select('id, code, name, unit, is_active').eq('supplier_id', params.id).order('code').limit(20) as any
+  const components = componentsData as { id: string; code: string; name: string; unit: string; is_active: boolean }[] | null
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -122,7 +120,7 @@ export default async function SupplierDetailPage({ params }: { params: { id: str
                 <p className="text-sm text-[var(--muted-foreground)] py-4 text-center">No components from this supplier yet.</p>
               ) : (
                 <div className="space-y-2">
-                  {(components ?? []).map((c: { id: string; code: string; name: string; unit: string; is_active: boolean }) => (
+                  {(components ?? []).map((c) => (
                     <Link
                       key={c.id}
                       href={`/components/${c.id}`}
@@ -154,7 +152,7 @@ export default async function SupplierDetailPage({ params }: { params: { id: str
               </div>
               <div className="flex justify-between">
                 <span className="text-[var(--muted-foreground)]">Components</span>
-                <span>{(components ?? []).length}</span>
+                <span>{(components ?? []).length ?? 0}</span>
               </div>
             </CardContent>
           </Card>

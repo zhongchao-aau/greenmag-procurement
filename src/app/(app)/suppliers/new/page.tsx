@@ -26,7 +26,8 @@ export default function NewSupplierPage() {
     setError('')
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.from('suppliers').insert({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from('suppliers') as any).insert({
       name: form.name,
       country: form.country || null,
       contact_name: form.contact_name || null,

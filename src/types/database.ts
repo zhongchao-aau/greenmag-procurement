@@ -29,6 +29,7 @@ export interface Supplier {
   contact_name: string | null
   contact_email: string | null
   contact_phone: string | null
+  lead_time_days: number | null
   notes: string | null
   is_active: boolean
   created_at: string
