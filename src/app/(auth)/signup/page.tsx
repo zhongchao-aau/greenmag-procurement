@@ -7,19 +7,26 @@ import { Input } from '@/components/ui/input'
 import { Magnet } from 'lucide-react'
 import Link from 'next/link'
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [fullName, setFullName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
-  async function handleLogin(e: React.FormEvent) {
+  async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
     setError('')
     setLoading(true)
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: fullName },
+      },
+    })
     if (error) {
       setError(error.message)
       setLoading(false)
@@ -38,12 +45,21 @@ export default function LoginPage() {
             <Magnet className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-xl font-bold text-[var(--foreground)]">GreenMag Procurement</h1>
-          <p className="text-sm text-[var(--muted-foreground)] mt-1">Sign in to your account</p>
+          <p className="text-sm text-[var(--muted-foreground)] mt-1">Create your account</p>
         </div>
 
         {/* Form */}
         <div className="card p-6">
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <form onSubmit={handleSignup} className="flex flex-col gap-4">
+            <Input
+              label="Full name"
+              type="text"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              placeholder="Your name"
+              required
+              autoComplete="name"
+            />
             <Input
               label="Email address"
               type="email"
@@ -60,21 +76,22 @@ export default function LoginPage() {
               onChange={e => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              autoComplete="current-password"
+              minLength={6}
+              autoComplete="new-password"
             />
             {error && (
               <p className="text-sm text-[var(--destructive)] bg-red-50 px-3 py-2 rounded-md">{error}</p>
             )}
             <Button type="submit" loading={loading} className="w-full mt-1">
-              Sign in
+              Create account
             </Button>
           </form>
         </div>
 
         <p className="text-center text-xs text-[var(--muted-foreground)] mt-4">
-          Don&apos;t have an account?{' '}
-          <Link href="/signup" className="text-[var(--primary)] hover:underline">
-            Create one
+          Already have an account?{' '}
+          <Link href="/login" className="text-[var(--primary)] hover:underline">
+            Sign in
           </Link>
         </p>
       </div>
