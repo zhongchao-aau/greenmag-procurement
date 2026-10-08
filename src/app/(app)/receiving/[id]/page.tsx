@@ -24,7 +24,7 @@ export default async function ReceiptDetailPage({ params }: { params: Promise<{ 
       *,
       shipment:shipments(id, code, description)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!receipt) notFound()
@@ -32,7 +32,7 @@ export default async function ReceiptDetailPage({ params }: { params: Promise<{ 
   const [{ data: receiptItems }, { data: inspections }] = await Promise.all([
     supabase.from('receipt_items')
       .select('id, quantity_received, component:components(id, code, name, unit)')
-      .eq('receipt_id', params.id),
+      .eq('receipt_id', id),
     supabase.from('inspections')
       .select(`
         id, overall_result, inspected_at, notes,
@@ -41,7 +41,7 @@ export default async function ReceiptDetailPage({ params }: { params: Promise<{ 
           component:components(id, code, name, unit)
         )
       `)
-      .eq('receipt_id', params.id)
+      .eq('receipt_id', id)
       .order('created_at', { ascending: false }),
   ])
 
