@@ -24,7 +24,6 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
     .select(`
       *,
       supplier:suppliers(id, name, contact_name, contact_email),
-      request:purchase_requests(id, code, purpose),
       created_by_profile:profiles!created_by(full_name)
     `)
     .eq('id', id)
