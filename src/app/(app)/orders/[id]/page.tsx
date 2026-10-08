@@ -9,7 +9,8 @@ import { orderStatusClass, ORDER_STATUS_LABELS, formatDate, formatRelative, form
 import { OrderActions } from './order-actions'
 export const dynamic = 'force-dynamic'
 
-export default async function OrderDetailPage({ params }: { params: { id: string } }) {
+export default async function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
