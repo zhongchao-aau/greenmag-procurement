@@ -103,7 +103,6 @@ export default function NewOrderPage() {
     const { data: order, error: orderErr } = await supabase
       .from('purchase_orders')
       .insert({
-        request_id: requestId || null,
         supplier_id: form.supplier_id || null,
         expected_delivery: form.expected_delivery || null,
         notes: form.notes || null,
