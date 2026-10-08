@@ -106,7 +106,7 @@ export default function NewOrderPage() {
         supplier_id: form.supplier_id || null,
         expected_delivery: form.expected_delivery || null,
         notes: form.notes || null,
-        status: 'draft',
+        status: 'approved',
       })
       .select('id')
       .single()
