@@ -9,7 +9,8 @@ import { ArrowLeft, Edit, Package, AlertTriangle } from 'lucide-react'
 import { formatDate, formatRelative, formatQuantity } from '@/lib/utils'
 export const dynamic = 'force-dynamic'
 
-export default async function ComponentDetailPage({ params }: { params: { id: string } }) {
+export default async function ComponentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
