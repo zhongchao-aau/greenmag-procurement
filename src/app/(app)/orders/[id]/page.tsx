@@ -77,7 +77,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                       <Link href={`/suppliers/${(order.supplier as { id: string; name: string }).id}`} className="font-semibold hover:text-[var(--primary)]">
                         {(order.supplier as { id: string; name: string }).name}
                       </Link>
-                      y(order.supplier as { contact_name: string | null }).contact_name && (
+                      {(order.supplier as { contact_name: string | null }).contact_name && (
                         <p className="text-sm text-[var(--muted-foreground)]">{(order.supplier as { contact_name: string | null }).contact_name}</p>
                       )}
                     </div>
