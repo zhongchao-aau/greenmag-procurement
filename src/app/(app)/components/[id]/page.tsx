@@ -22,7 +22,7 @@ export default async function ComponentDetailPage({ params }: { params: Promise<
   const { data: component } = await supabase
     .from('components')
     .select('*, supplier:suppliers(id, name)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!component) notFound()
@@ -31,10 +31,10 @@ export default async function ComponentDetailPage({ params }: { params: Promise<
     { data: balance },
     { data: transactions },
   ] = await Promise.all([
-    supabase.from('inventory_balances').select('quantity, updated_at').eq('component_id', params.id).single(),
+    supabase.from('inventory_balances').select('quantity, updated_at').eq('component_id', id).single(),
     supabase.from('inventory_transactions')
       .select('id, transaction_type, quantity, notes, created_at, performed_by:profiles!performed_by(full_name)')
-      .eq('component_id', params.id)
+      .eq('component_id', id)
       .order('created_at', { ascending: false })
       .limit(20),
   ])
@@ -49,7 +49,7 @@ export default async function ComponentDetailPage({ params }: { params: Promise<
           <ArrowLeft className="w-4 h-4" />Back to Components
         </Link>
         {isAdmin && (
-          <Link href={`/components/${params.id}/edit`}>
+          <Link href={`/components/${id}/edit`}>
             <Button size="sm" variant="outline"><Edit className="w-3.5 h-3.5 mr-1.5" />Edit</Button>
           </Link>
         )}
