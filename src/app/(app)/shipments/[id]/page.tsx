@@ -27,7 +27,7 @@ export default async function ShipmentDetailPage({ params }: { params: Promise<{
       *,
       order:purchase_orders(id, code, supplier:suppliers(name))
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single() as any)
   const shipment = shipmentData as {
     id: string; code: string; description: string | null; status: string;
@@ -42,10 +42,10 @@ export default async function ShipmentDetailPage({ params }: { params: Promise<{
   const [{ data: items }, { data: events }] = await Promise.all([
     supabase.from('shipment_items')
       .select('id, quantity_shipped, component:components(id, code, name, unit)')
-      .eq('shipment_id', params.id),
+      .eq('shipment_id', id),
     supabase.from('shipment_events')
       .select('id, event_date, location, description, tracking_leg, created_at')
-      .eq('shipment_id', params.id)
+      .eq('shipment_id', id)
       .order('event_date', { ascending: false }),
   ])
 
@@ -53,7 +53,7 @@ export default async function ShipmentDetailPage({ params }: { params: Promise<{
   const { data: existingReceipt } = await supabase
     .from('receipts')
     .select('id')
-    .eq('shipment_id', params.id)
+    .eq('shipment_id', id)
     .maybeSingle()
   const hasReceipt = !!existingReceipt
 
@@ -226,7 +226,7 @@ export default async function ShipmentDetailPage({ params }: { params: Promise<{
         {/* Right sidebar */}
         <div className="space-y-4">
           {isAdmin && (
-            <ShipmentActions shipmentId={params.id} status={shipment.status} isDelivered={isDelivered} />
+            <ShipmentActions shipmentId={id} status={shipment.status} isDelivered={isDelivered} />
           )}
 
           <Card>
@@ -255,7 +255,7 @@ export default async function ShipmentDetailPage({ params }: { params: Promise<{
             <Card className="border-green-200 bg-green-50">
               <CardContent className="pt-4">
                 <p className="text-sm text-green-800 mb-3">Shipment delivered — record receipt and inspection.</p>
-                <Link href={`/receiving/new?shipment=${params.id}`}>
+                <Link href={`/receiving/new?shipment=${id}`}>
                   <button className="w-full text-sm bg-green-700 text-white rounded-md px-3 py-2 hover:bg-green-800 transition-colors">
                     Record Receipt & Inspection →
                   </button>
