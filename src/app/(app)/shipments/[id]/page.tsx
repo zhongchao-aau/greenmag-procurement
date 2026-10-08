@@ -8,7 +8,8 @@ import { shipmentStatusClass, SHIPMENT_STATUS_LABELS, formatDate, formatRelative
 import { ShipmentActions } from './shipment-actions'
 export const dynamic = 'force-dynamic'
 
-export default async function ShipmentDetailPage({ params }: { params: { id: string } }) {
+export default async function ShipmentDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
