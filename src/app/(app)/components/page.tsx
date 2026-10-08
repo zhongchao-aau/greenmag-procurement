@@ -7,7 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, EmptySta
 import { Plus, Package } from 'lucide-react'
 export const dynamic = 'force-dynamic'
 
-export default async function ComponentsPage({ searchParams }: { searchParams: { supplier?: string; filter?: string } }) {
+export default async function ComponentsPage({ searchParams }: { searchParams: Promise<{ supplier?: string; filter?: string }> }) {
+  const { supplier, filter } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -24,11 +25,11 @@ export default async function ComponentsPage({ searchParams }: { searchParams: {
     `)
     .order('code', { ascending: true })
 
-  if (searchParams.supplier) {
-    query = query.eq('supplier_id', searchParams.supplier)
+  if (supplier) {
+    query = query.eq('supplier_id', supplier)
   }
 
-  if (searchParams.filter === 'active') {
+  if (filter === 'active') {
     query = query.eq('is_active', true)
   }
 
