@@ -29,8 +29,14 @@ export async function middleware(request: NextRequest) {
 
   const { pathname } = request.nextUrl
 
+  // API routes with their own auth (cron secret / service role key) — skip session check
+  const selfAuthApiRoutes = ['/api/cron/', '/api/tracking/refresh']
+  if (selfAuthApiRoutes.some(r => pathname.startsWith(r))) {
+    return supabaseResponse
+  }
+
   // Public routes (no auth required)
-  const publicRoutes = ['/login', '/auth/callback']
+  const publicRoutes = ['/login', '/signup', '/auth/callback']
   if (publicRoutes.some(r => pathname.startsWith(r))) {
     if (user) {
       return NextResponse.redirect(new URL('/dashboard', request.url))
