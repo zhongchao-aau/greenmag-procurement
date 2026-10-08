@@ -27,7 +27,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       request:purchase_requests(id, code, purpose),
       created_by_profile:profiles!created_by(full_name)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!order) notFound()
@@ -40,17 +40,17 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
       ? 'id, quantity_ordered, quantity_received, unit_price, currency, total_cost, notes, component:components(id, code, name, unit)'
       : 'id, quantity_ordered, quantity_received, notes, component:components(id, code, name, unit)'
     )
-    .eq('order_id', params.id)
+    .eq('order_id', id)
 
   const { data: shipments } = await supabase
     .from('shipments')
     .select('id, code, status, expected_delivery')
-    .eq('order_id', params.id)
+    .eq('order_id', id)
 
   const { data: activity } = await supabase
     .from('activity_log')
     .select('id, description, created_at, performer:profiles!performed_by(full_name)')
-    .eq('entity_id', params.id)
+    .eq('entity_id', id)
     .order('created_at', { ascending: true })
 
   const canTransition = isAdmin
@@ -77,7 +77,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                       <Link href={`/suppliers/${(order.supplier as { id: string; name: string }).id}`} className="font-semibold hover:text-[var(--primary)]">
                         {(order.supplier as { id: string; name: string }).name}
                       </Link>
-                      {(order.supplier as { contact_name: string | null }).contact_name && (
+                      y(order.supplier as { contact_name: string | null }).contact_name && (
                         <p className="text-sm text-[var(--muted-foreground)]">{(order.supplier as { contact_name: string | null }).contact_name}</p>
                       )}
                     </div>
@@ -161,7 +161,7 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
                 <div className="flex items-center justify-between">
                   <CardTitle>Shipments</CardTitle>
                   {isAdmin && (
-                    <Link href={`/shipments/new?order=${params.id}`} className="text-xs text-[var(--primary)] hover:underline">+ Add Shipment</Link>
+                    <Link href={`/shipments/new?order=${id}`} className="text-xs text-[var(--primary)] hover:underline">+ Add Shipment</Link>
                   )}
                 </div>
               </CardHeader>
@@ -208,13 +208,13 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ id
 
         <div className="space-y-4">
           {canTransition && (
-            <OrderActions orderId={params.id} status={order.status} />
+            <OrderActions orderId={id} status={order.status} />
           )}
 
           {isAdmin && (shipments ?? []).length === 0 && ['sent', 'confirmed'].includes(order.status) && (
             <Card>
               <CardContent className="pt-4">
-                <Link href={`/shipments/new?order=${params.id}`} className="block">
+                <Link href={`/shipments/new?order=${id}`} className="block">
                   <button className="w-full text-sm text-[var(--primary)] hover:underline text-left">+ Create Shipment for this Order</button>
                 </Link>
               </CardContent>
