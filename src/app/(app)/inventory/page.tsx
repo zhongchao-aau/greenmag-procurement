@@ -13,7 +13,8 @@ const FILTER_TABS = [
   { value: 'zero', label: '🔴 Out of Stock' },
 ]
 
-export default async function InventoryPage({ searchParams }: { searchParams: { filter?: string } }) {
+export default async function InventoryPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
+  const { filter } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -30,7 +31,7 @@ export default async function InventoryPage({ searchParams }: { searchParams: { 
     `)
     .order('quantity', { ascending: true })
 
-  const filter = searchParams.filter ?? ''
+  const filter = filter ?? ''
 
   const filtered = (balances ?? []).filter((b: {
     quantity: number
