@@ -8,14 +8,14 @@ import { Input } from '@/components/ui/input'
 import { RefreshCw } from 'lucide-react'
 
 const TRANSITIONS: Record<string, { label: string; next: string }[]> = {
-  created: [{ label: 'Mark China Dispatched', next: 'china_dispatched' }],
-  china_dispatched: [{ label: 'Mark In Transit (Int\'l)', next: 'in_transit' }],
+  created: [{ label: 'Mark China Dispatched', next: 'dispatched' }],
+  dispatched: [{ label: 'Mark In Transit (Int\'l)', next: 'in_transit' }],
   in_transit: [
     { label: 'At Customs', next: 'customs' },
-    { label: 'EU Transit', next: 'eu_transit' },
+    { label: 'EU Transit', next: 'out_for_delivery' },
   ],
-  customs: [{ label: 'Cleared Customs', next: 'eu_transit' }],
-  eu_transit: [{ label: 'Mark Delivered', next: 'delivered' }],
+  customs: [{ label: 'Cleared Customs', next: 'out_for_delivery' }],
+  out_for_delivery: [{ label: 'Mark Delivered', next: 'delivered' }],
 }
 
 export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentId: string; status: string; isDelivered: boolean }) {
@@ -34,7 +34,7 @@ export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentI
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Refresh failed')
-      setRefreshResult(data.updated > 0 ? 'Tracking updated ✓' : 'No changes')
+      setRefreshResult(data.updated > 0 ? 'Tracking updated â' : 'No changes')
       router.refresh()
     } catch (err) {
       setRefreshResult(err instanceof Error ? err.message : 'Error')
@@ -122,8 +122,8 @@ export function ShipmentActions({ shipmentId, status, isDelivered }: { shipmentI
                 value={event.tracking_leg}
                 onChange={e => setEvent(ev => ({ ...ev, tracking_leg: e.target.value as 'china' | 'eu' }))}
               >
-                <option value="china">🇨🇳 China</option>
-                <option value="eu">🇪🇺 EU</option>
+                <option value="china">ð¨ð³ China</option>
+                <option value="eu">ðªðº EU</option>
               </select>
               <input
                 type="date"
