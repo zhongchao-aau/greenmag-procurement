@@ -9,7 +9,7 @@ import { requestStatusClass, REQUEST_STATUS_LABELS, formatDate, formatRelative, 
 import { RequestActions } from './request-actions'
 export const dynamic = 'force-dynamic'
 
-export default async function RequestDetailPage({ params }: { params: { id: string } }) {
+export default async function RequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
