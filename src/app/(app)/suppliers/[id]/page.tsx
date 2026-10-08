@@ -22,14 +22,14 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
   const isAdmin = profile.role === 'admin'
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: supplierData } = await supabase.from('suppliers').select('*').eq('id', params.id).single() as any
+  const { data: supplierData } = await supabase.from('suppliers').select('*').eq('id', id).single() as any
   const supplier = supplierData as Supplier | null
 
   if (!supplier) notFound()
 
   // Components from this supplier
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: componentsData } = await supabase.from('components').select('id, code, name, unit, is_active').eq('supplier_id', params.id).order('code').limit(20) as any
+  const { data: componentsData } = await supabase.from('components').select('id, code, name, unit, is_active').eq('supplier_id', id).order('code').limit(20) as any
   const components = componentsData as { id: string; code: string; name: string; unit: string; is_active: boolean }[] | null
 
   return (
@@ -39,7 +39,7 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
           <ArrowLeft className="w-4 h-4" />Back to Suppliers
         </Link>
         {isAdmin && (
-          <Link href={`/suppliers/${params.id}/edit`}>
+          <Link href={`/suppliers/${id}/edit`}>
             <Button size="sm" variant="outline"><Edit className="w-3.5 h-3.5 mr-1.5" />Edit</Button>
           </Link>
         )}
@@ -114,7 +114,7 @@ export default async function SupplierDetailPage({ params }: { params: Promise<{
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Components</CardTitle>
-                <Link href={`/components?supplier=${params.id}`} className="text-xs text-[var(--primary)] hover:underline">View all →</Link>
+                <Link href={`/components?supplier=${id}`} className="text-xs text-[var(--primary)] hover:underline">View all →</Link>
               </div>
             </CardHeader>
             <CardContent>
