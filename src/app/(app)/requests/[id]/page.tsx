@@ -10,6 +10,7 @@ import { RequestActions } from './request-actions'
 export const dynamic = 'force-dynamic'
 
 export default async function RequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -25,7 +26,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
       requester:profiles!requester_id(id, full_name, email),
       reviewer:profiles!reviewer_id(full_name)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!request) notFound()
@@ -39,13 +40,13 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
       id, quantity_requested, notes,
       component:components(id, code, name, unit)
     `)
-    .eq('request_id', params.id)
+    .eq('request_id', id)
     .order('created_at')
 
   const { data: activity } = await supabase
     .from('activity_log')
     .select('id, action, description, created_at, performer:profiles!performed_by(full_name)')
-    .eq('entity_id', params.id)
+    .eq('entity_id', id)
     .order('created_at', { ascending: true })
 
   const isOwner = request.requester_id === user.id
@@ -154,7 +155,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
         <div className="space-y-4">
           {/* Actions */}
           <RequestActions
-            requestId={params.id}
+            requestId={id}
             status={request.status}
             canEdit={canEdit}
             canSubmit={canSubmit}
