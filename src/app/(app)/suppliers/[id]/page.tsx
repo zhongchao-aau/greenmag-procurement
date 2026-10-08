@@ -9,7 +9,8 @@ import { formatDate } from '@/lib/utils'
 import type { Supplier } from '@/types/database'
 export const dynamic = 'force-dynamic'
 
-export default async function SupplierDetailPage({ params }: { params: { id: string } }) {
+export default async function SupplierDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
