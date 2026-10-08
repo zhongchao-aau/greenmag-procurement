@@ -14,7 +14,7 @@ const FILTER_TABS = [
 ]
 
 export default async function InventoryPage({ searchParams }: { searchParams: Promise<{ filter?: string }> }) {
-  const { filter } = await searchParams
+  const { filter = '' } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -30,8 +30,6 @@ export default async function InventoryPage({ searchParams }: { searchParams: Pr
       component:components(id, code, name, unit, low_stock_threshold, supplier:suppliers(name))
     `)
     .order('quantity', { ascending: true })
-
-  const filter = filter ?? ''
 
   const filtered = (balances ?? []).filter((b: {
     quantity: number
@@ -59,7 +57,7 @@ export default async function InventoryPage({ searchParams }: { searchParams: Pr
         </Link>
       </div>
 
-      <div className="flex gap-1 mb-4 border-b border-[var(--border)] overflow-x-auto">
+      <div className="flex gap-1 mb-4 border-b border-[var(--border)] overflox-x-auto">
         {FILTER_TABS.map(tab => (
           <Link
             key={tab.value}
