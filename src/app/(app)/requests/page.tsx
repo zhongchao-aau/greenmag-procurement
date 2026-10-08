@@ -17,7 +17,8 @@ const STATUS_TABS = [
   { value: 'rejected', label: 'Rejected' },
 ]
 
-export default async function RequestsPage({ searchParams }: { searchParams: { status?: string } }) {
+export default async function RequestsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -39,13 +40,13 @@ export default async function RequestsPage({ searchParams }: { searchParams: { s
     query = query.eq('requester_id', user.id)
   }
 
-  if (searchParams.status) {
-    query = query.eq('status', searchParams.status)
+  if (status) {
+    query = query.eq('status', status)
   }
 
   const { data: requests } = await query.limit(50)
 
-  const activeStatus = searchParams.status ?? ''
+  const activeStatus = status ?? ''
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
