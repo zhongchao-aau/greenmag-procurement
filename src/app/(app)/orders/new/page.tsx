@@ -117,7 +117,8 @@ export default function NewOrderPage() {
       validItems.map(item => ({
         order_id: order.id,
         component_id: item.component_id,
-        quantity_ordered: parseFloat(item.quantity_ordered),
+        quantity: parseFloat(item.quantity_ordered),
+        item_name: item.component_name || item.component_id,
         unit_price: item.unit_price ? parseFloat(item.unit_price) : null,
         currency: item.currency || 'EUR',
         notes: item.notes || null,
