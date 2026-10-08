@@ -17,7 +17,8 @@ const STATUS_TABS = [
   { value: 'closed', label: 'Closed' },
 ]
 
-export default async function OrdersPage({ searchParams }: { searchParams: { status?: string } }) {
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -35,10 +36,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: { sta
     `)
     .order('created_at', { ascending: false })
 
-  if (searchParams.status) query = query.eq('status', searchParams.status)
+  if (status) query = query.eq('status', status)
 
   const { data: orders } = await query.limit(50)
-  const activeStatus = searchParams.status ?? ''
+  const activeStatus = status ?? ''
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
