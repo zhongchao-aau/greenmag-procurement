@@ -19,7 +19,8 @@ const STATUS_TABS = [
   { value: 'delivered', label: 'Delivered' },
 ]
 
-export default async function ShipmentsPage({ searchParams }: { searchParams: { status?: string } }) {
+export default async function ShipmentsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+  const { status } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -39,10 +40,10 @@ export default async function ShipmentsPage({ searchParams }: { searchParams: { 
     `)
     .order('created_at', { ascending: false })
 
-  if (searchParams.status) query = query.eq('status', searchParams.status)
+  if (status) query = query.eq('status', status)
 
   const { data: shipments } = await query.limit(50)
-  const activeStatus = searchParams.status ?? ''
+  const activeStatus = status ?? ''
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -114,7 +115,7 @@ export default async function ShipmentsPage({ searchParams }: { searchParams: { 
                     <Link href={`/shipments/${s.id}`} className="text-sm font-medium hover:text-[var(--primary)]">
                       {s.description ?? s.code}
                     </Link>
-                    {s.order && (
+                    {(s.order) && (
                       <p className="text-xs text-[var(--muted-foreground)]">{s.order.code}</p>
                     )}
                   </TableCell>
