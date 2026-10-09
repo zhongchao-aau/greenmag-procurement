@@ -6,6 +6,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { ArrowLeft, FileText } from 'lucide-react'
 import { requestStatusClass, REQUEST_STATUS_LABELS, formatDate, formatRelative, formatQuantity } from '@/lib/utils'
+
+const REQUEST_TYPE_LABELS: Record<string, string> = {
+  procure: 'Procure',
+  build: 'Build Product',
+  component_update: 'Component Update',
+}
 import { RequestActions } from './request-actions'
 export const dynamic = 'force-dynamic'
 
@@ -76,6 +82,11 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
                     <Badge className={requestStatusClass(request.status as never)}>
                       {REQUEST_STATUS_LABELS[request.status as never]}
                     </Badge>
+                    {request.request_type && (
+                      <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                        {REQUEST_TYPE_LABELS[request.request_type] ?? request.request_type}
+                      </span>
+                    )}
                   </div>
                   <CardTitle className="text-lg">{request.purpose ?? 'No description'}</CardTitle>
                   <p className="text-sm text-[var(--muted-foreground)] mt-1">
@@ -118,7 +129,7 @@ export default async function RequestDetailPage({ params }: { params: Promise<{ 
                         ) : <span className="text-[var(--muted-foreground)]">—</span>}
                       </TableCell>
                       <TableCell className="text-sm font-medium">
-                        {formatQuantity(item.quantity_requested)} {item.component?.unit}
+                        {request.request_type === 'component_update' ? <span className="text-[var(--muted-foreground)] italic">update</span> : <>{formatQuantity(item.quantity_requested)} {item.component?.unit}</>}
                       </TableCell>
                       <TableCell className="text-sm text-[var(--muted-foreground)]">{item.notes ?? '—'}</TableCell>
                     </TableRow>
