@@ -174,6 +174,16 @@ export default function NewRequestPage() {
   }
 
   const TAB_LABELS: Record<RequestType, string> = { procure: 'Procure', build: 'Build Product', component_update: 'Component Update' }
+  const PAGE_TITLES: Record<RequestType, string> = {
+    procure: 'New Purchase Request',
+    build: 'New Build Request',
+    component_update: 'New Component Update',
+  }
+  const PAGE_SUBTITLES: Record<RequestType, string> = {
+    procure: 'Request components for procurement. An admin will review and approve.',
+    build: 'Select a product variant — the form auto-calculates BOM shortfall and fills in what needs ordering.',
+    component_update: 'Request a change to an existing component\'s details.',
+  }
   const sel = 'w-full rounded-md border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent'
 
   return (
@@ -182,8 +192,8 @@ export default function NewRequestPage() {
         <ArrowLeft className="w-4 h-4" />Back to Requests
       </Link>
       <div className="mb-6">
-        <h1 className="text-xl font-semibold">New Purchase Request</h1>
-        <p className="text-sm text-[var(--muted-foreground)] mt-0.5">Select the request type and fill in the details.</p>
+        <h1 className="text-xl font-semibold">{PAGE_TITLES[requestType]}</h1>
+        <p className="text-sm text-[var(--muted-foreground)] mt-0.5">{PAGE_SUBTITLES[requestType]}</p>
       </div>
       <div className="flex gap-1 mb-6 bg-[var(--secondary)] p-1 rounded-lg">
         {(['procure', 'build', 'component_update'] as RequestType[]).map(type => (
