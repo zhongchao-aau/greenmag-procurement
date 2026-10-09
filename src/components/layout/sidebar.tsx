@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import {
   LayoutDashboard, FileText, ShoppingCart, Truck, Package,
-  FlaskConical, Boxes, Building2, LogOut, Magnet, ClipboardCheck
+  FlaskConical, Boxes, Building2, LogOut, Magnet, ClipboardCheck, Factory
 } from 'lucide-react'
 import type { Profile } from '@/types/database'
 import { createClient } from '@/lib/supabase/client'
@@ -24,6 +24,7 @@ const adminOnlyNav = [
 ]
 
 const masterNav = [
+  { href: '/products', label: 'Products', icon: Factory },
   { href: '/components', label: 'Components', icon: Boxes },
   { href: '/suppliers', label: 'Suppliers', icon: Building2 },
 ]
