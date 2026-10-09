@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { ArrowLeft } from 'lucide-react'
 
-const CATEGORIES = ['Magnet Assembly', 'Rotor', 'Stator', 'Electronics', 'Housing', 'Other']
+const CATEGORIES = ['Magnet Assembly', 'Rotor', 'Stator', 'Electronics', 'Housing', 'Rubicon-AC Inductor', 'Other']
 const STATUSES = ['active', 'prototype', 'obsolete', 'discontinued'] as const
 
 export default function NewProductPage() {
