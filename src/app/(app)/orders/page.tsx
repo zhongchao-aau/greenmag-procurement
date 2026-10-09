@@ -8,6 +8,7 @@ import { Plus, ShoppingCart } from 'lucide-react'
 import { orderStatusClass, ORDER_STATUS_LABELS, formatDate, formatRelative } from '@/lib/utils'
 export const dynamic = 'force-dynamic'
 
+
 const STATUS_TABS = [
   { value: '', label: 'All' },
   { value: 'draft', label: 'Draft' },
@@ -17,29 +18,34 @@ const STATUS_TABS = [
   { value: 'closed', label: 'Closed' },
 ]
 
+
 export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   const { status } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
+
   const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).single()
   if (!profile) redirect('/login')
   const isAdmin = profile.role === 'admin'
+
 
   let query = supabase
     .from('purchase_orders')
     .select(`
       id, code, status, notes, expected_delivery, created_at, updated_at,
-      supplier:suppliers(name),
-      request:purchase_requests(code, purpose)
+      supplier:suppliers(name)
     `)
     .order('created_at', { ascending: false })
 
+
   if (status) query = query.eq('status', status)
+
 
   const { data: orders } = await query.limit(50)
   const activeStatus = status ?? ''
+
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -54,6 +60,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           </Link>
         )}
       </div>
+
 
       <div className="flex gap-1 mb-4 border-b border-[var(--border)]">
         {STATUS_TABS.map(tab => (
@@ -71,13 +78,13 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
         ))}
       </div>
 
+
       <div className="card overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>PO Code</TableHead>
               <TableHead>Supplier</TableHead>
-              <TableHead>Request</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Expected Delivery</TableHead>
               <TableHead>Updated</TableHead>
@@ -87,7 +94,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           <TableBody>
             {(orders ?? []).length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={6}>
                   <EmptyState
                     icon={<ShoppingCart className="w-8 h-8 text-[var(--muted-foreground)]" />}
                     title="No purchase orders"
@@ -100,19 +107,12 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
               (orders ?? []).map((o: {
                 id: string; code: string; status: string; notes: string | null;
                 expected_delivery: string | null; created_at: string; updated_at: string;
-                supplier: { name: string } | null; request: { code: string; purpose: string | null } | null
+                supplier: { name: string } | null;
               }) => (
                 <TableRow key={o.id}>
                   <TableCell className="font-mono text-xs text-[var(--muted-foreground)]">{o.code}</TableCell>
                   <TableCell className="font-medium">
-                    {o.supplier?.name ?? <span className="text-[var(--muted-foreground)]">—</span>}
-                  </TableCell>
-                  <TableCell>
-                    {o.request ? (
-                      <span className="text-xs text-[var(--muted-foreground)]">
-                        {o.request.code}{o.request.purpose ? ` · ${o.request.purpose}` : ''}
-                      </span>
-                    ) : <span className="text-[var(--muted-foreground)]">—</span>}
+                    {o.supplier?.name ?? <span className="text-[var(--muted-foreground)]">â</span>}
                   </TableCell>
                   <TableCell>
                     <Badge className={orderStatusClass(o.status as never)}>{ORDER_STATUS_LABELS[o.status as never]}</Badge>
